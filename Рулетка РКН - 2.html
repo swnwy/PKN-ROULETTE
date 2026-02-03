@@ -12,6 +12,7 @@
     --blue-dark:#2a4b8d;
     --blue-link:#0066cc;
     --border:#cccccc;
+    --crazymode-red:#ff3333
   }
   body{
     margin:0;
@@ -80,6 +81,20 @@
   .reel div{
     padding:4px 0;
     border-bottom:1px solid var(--gray-mid);
+  }
+
+  .btn-crazymode{
+    padding:6px 12px;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:1px solid var(--border);
+    background:var(--gray-light);
+    color:var(--gray-text);
+    margin-right:8px;
+  }
+  .btn-crazymode:hover{
+    background:var(--crazymode-red);
+    color:#fff;
   }
   .btn{
     padding:6px 12px;
@@ -163,7 +178,7 @@
     </div>
 
     <button class="btn btn-primary" id="spinBtn">Заблокировать</button>
-    <button class="btn" id="madBtn">Режим безумия (x5!)</button>
+    <button class="btn-crazymode" id="madBtn">Режим безумия (x5!)</button>
 
     <div class="card" id="resultCard"></div>
     <div class="info" id="counter">Запрещено сегодня: 0</div>
@@ -177,7 +192,7 @@
 <div class="add-service" id="addServiceBtn">Добавить свой сервис</div>
 
 <script>
-const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Telegram","Signal","Briar","VPN","Microsoft","Roblox"];
+const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM"];
 const reasons = ["слишком свободно","нарушает традиционные ценности","подозрительные мемы","нет представительства в РФ","иностранное настроение","просто так, хочу :D","пропаганда ЛГБТ, секса и наркотиков","пользуются иноагентами","враждебные пиксели","противодействие Терроризму"];
 const methods = ["по IP","по DNS","по чёрному списку","через магию отчётов","по настроению регулятора","по фазе луны","через кнопку “Запретить всё”","по секретному реестру"];
 const docs = [
