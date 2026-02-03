@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Программа для запретов</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --gray-light:#f2f2f2;
+    --gray-mid:#e5e5e5;
+    --gray-text:#333333;
+    --blue-dark:#2a4b8d;
+    --blue-link:#0066cc;
+    --border:#cccccc;
+  }
+  body{
+    margin:0;
+    font-family:system-ui,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--gray-text);
+    line-height:1.4;
+  }
+  a{color:var(--blue-link);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+  .header{
+    background:var(--bg);
+    padding:12px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+  }
+  .logo{
+    font-size:1.6rem;
+    font-weight:bold;
+    color:var(--blue-dark);
+    margin-right:10px;
+  }
+  .sublogo{
+    font-size:1rem;
+    color:var(--gray-text);
+  }
+  .nav{
+    background:var(--gray-light);
+    padding:8px 20px;
+    font-size:0.9rem;
+    border-bottom:1px solid var(--border);
+  }
+  .container{
+    max-width:960px;
+    margin:20px auto;
+    display:flex;
+    background:var(--bg);
+    border:1px solid var(--border);
+  }
+  .sidebar{
+    width:200px;
+    background:var(--gray-mid);
+    padding:15px;
+    font-size:0.9rem;
+    color:var(--gray-text);
+  }
+  .content{
+    flex:1;
+    padding:15px;
+  }
+  .form-box{
+    background:var(--bg);
+    border:1px solid var(--border);
+    padding:10px;
+    margin-bottom:15px;
+  }
+  .reel{
+    height:120px;
+    overflow-y:auto;
+    border:1px solid var(--border);
+    margin-bottom:10px;
+    font-size:0.95rem;
+    color:#000;
+  }
+  .reel div{
+    padding:4px 0;
+    border-bottom:1px solid var(--gray-mid);
+  }
+  .btn{
+    padding:6px 12px;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:1px solid var(--border);
+    background:var(--gray-light);
+    color:var(--gray-text);
+    margin-right:8px;
+  }
+  .btn:hover{background:var(--gray-mid);}
+  .btn-primary{
+    background:var(--blue-link);
+    color:#fff;
+    border-color:var(--blue-link);
+  }
+  .btn-primary:hover{background:#0055aa;}
+  .card{
+    background:var(--gray-light);
+    border:1px solid var(--border);
+    padding:10px;
+    font-size:0.9rem;
+    margin-top:10px;
+    display:none;
+  }
+  .info{margin-top:10px;font-size:0.9rem;}
+  .footer{
+    text-align:center;
+    font-size:0.85rem;
+    color:var(--gray-text);
+    margin:30px 0 10px;
+  }
+  .add-service{
+    position:fixed;
+    left:10px;
+    bottom:10px;
+    padding:4px 8px;
+    font-size:0.8rem;
+    background:var(--gray-light);
+    border:1px solid var(--border);
+    cursor:pointer;
+  }
+  .add-service:hover{background:var(--gray-mid);}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">РОСКОМНАДЗОР</div>
+  <div class="sublogo">РУЛЕТКА!</div>
+</header>
+
+<nav class="nav">
+  <a href="#">Главная</a> |
+  <a href="#">О сервисе</a> |
+  <a href="https://swnwy.t.me">Контакты</a>
+</nav>
+
+<div class="container">
+  <aside class="sidebar">
+    <strong>Меню</strong>
+    <ul style="list-style:none;padding-left:0;">
+      <li><a href="#">Проверка ресурса</a></li>
+      <li><a href="#">Статистика</a></li>
+      <li><a href="#">Документы</a></li>
+    </ul>
+  </aside>
+
+  <section class="content">
+    <h2 style="color:var(--blue-dark);margin-top:0;">Программа для запретов</h2>
+
+    <div class="form-box">
+      <label style="font-weight:bold;">Сервис</label>
+      <div class="reel" id="reelService"></div>
+
+      <label style="font-weight:bold;">Обвиняем в</label>
+      <div class="reel" id="reelReason"></div>
+
+      <label style="font-weight:bold;">Способ блокировки</label>
+      <div class="reel" id="reelMethod"></div>
+    </div>
+
+    <button class="btn btn-primary" id="spinBtn">Заблокировать</button>
+    <button class="btn" id="madBtn">Режим безумия (x5!)</button>
+
+    <div class="card" id="resultCard"></div>
+    <div class="info" id="counter">Запрещено сегодня: 0</div>
+    <div class="info" id="index">Индекс цифрового суверенитета: <span id="sovIndex"></span>%</div>
+  </section>
+</div>
+
+<div class="footer">Игру создал @swnwy. Исходный код есть в Github.</div>
+<div class="footer">Я не захостил все это, так как я бомж без денег.</div>
+
+<div class="add-service" id="addServiceBtn">Добавить свой сервис</div>
+
+<script>
+const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Telegram","Signal","Briar","VPN","Microsoft","Roblox"];
+const reasons = ["слишком свободно","нарушает традиционные ценности","подозрительные мемы","нет представительства в РФ","иностранное настроение","просто так, хочу :D","пропаганда ЛГБТ, секса и наркотиков","пользуются иноагентами","враждебные пиксели","противодействие Терроризму"];
+const methods = ["по IP","по DNS","по чёрному списку","через магию отчётов","по настроению регулятора","по фазе луны","через кнопку “Запретить всё”","по секретному реестру"];
+const docs = [
+  {num:"149-ФЗ", title:"«Об информации, информационных технологиях и о защите информации»"},
+  {num:"436-ФЗ", title:"«О защите детей от информации, причиняющей вред их здоровью и развитию»"},
+  {num:"12-ХУ",title:"О контроле чрезмерной свободы"},
+  {num:"276-ФЗ", title:"о VPN-сервисах и анонимайзерах"}
+];
+const clickSound = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=");
+
+function randItem(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
+
+function fillReel(id, items){
+  const el=document.getElementById(id);
+  el.innerHTML='';
+  items.forEach(t=>{const d=document.createElement('div');d.textContent=t;el.appendChild(d);});
+}
+fillReel('reelService',services);
+fillReel('reelReason',reasons);
+fillReel('reelMethod',methods);
+
+function spinReel(el,duration){
+  const total=el.scrollHeight/2;
+  const start=el.scrollTop;
+  const end=start+total;
+  const startTime=performance.now();
+  return new Promise(res=>{
+    function animate(t){
+      const elapsed=t-startTime;
+      const prog=Math.min(elapsed/duration,1);
+      el.scrollTop=start+(end-start)*prog;
+      if(prog<1)requestAnimationFrame(animate);
+      else res();
+    }
+    requestAnimationFrame(animate);
+  });
+}
+
+document.getElementById('spinBtn').addEventListener('click',async()=>{
+  clickSound.currentTime=0;clickSound.play();
+  const s=document.getElementById('reelService');
+  const r=document.getElementById('reelReason');
+  const m=document.getElementById('reelMethod');
+  await Promise.all([spinReel(s,2000),spinReel(r,2000),spinReel(m,2000)]);
+  const service=s.children[Math.floor(Math.random()*services.length)].textContent;
+  const reason=r.children[Math.floor(Math.random()*reasons.length)].textContent;
+  const method=m.children[Math.floor(Math.random()*methods.length)].textContent;
+  showResult([{service,reason,method}]);
+});
+
+document.getElementById('madBtn').addEventListener('click',async()=>{
+  clickSound.currentTime=0;clickSound.play();
+  const count=Math.floor(Math.random()*3)+3;
+  const chosen=shuffle(services).slice(0,count);
+  const s=document.getElementById('reelService');
+  const r=document.getElementById('reelReason');
+  const m=document.getElementById('reelMethod');
+  await Promise.all([spinReel(s,2500),spinReel(r,2500),spinReel(m,2500)]);
+  const results=[];
+  const usedR=[];const usedM=[];
+  chosen.forEach(srv=>{
+    let r;do{r=randItem(reasons);}while(usedR.includes(r));
+    usedR.push(r);
+    let m;do{m=randItem(methods);}while(usedM.includes(m));
+    usedM.push(m);
+    results.push({service:srv,reason:r,method:m});
+  });
+  showResult(results);
+});
+
+function showResult(items){
+  const card=document.getElementById('resultCard');
+  card.innerHTML=items.map(it=>{
+    const docsChosen=shuffle(docs).slice(0,Math.floor(Math.random()*2)+1);
+    const docList=docsChosen.map(d=>`• Федеральный закон № ${d.num} – «${d.title}»`).join('<br>');
+    return `<strong>Сервис:</strong> ${it.service}<br>
+            <strong>Обвиняем в:</strong> ${it.reason}<br>
+            <strong>Способ запрета:</strong> ${it.method}<br>
+            <br><strong>Нормативное обоснование:</strong><br>${docList}<hr>`;
+  }).join('');
+  card.style.display='block';
+  const counter=document.getElementById('counter');
+  const cur=parseInt(counter.textContent.match(/\d+/)[0]);
+  counter.textContent=`Зарплата: ${cur+items.length}`;
+}
+
+document.getElementById('sovIndex').textContent=(70+Math.floor(Math.random()*31)).toString();
+
+document.getElementById('addServiceBtn').addEventListener('click',()=>{
+  const name=prompt("Введите название сервиса");
+  if(name && name.trim()){
+    services.push(name.trim());
+    fillReel('reelService',services);
+  }
+});
+</script>
+</body>
+</html>
