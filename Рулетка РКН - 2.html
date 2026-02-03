@@ -216,21 +216,40 @@ function fillReel(id, items){
 fillReel('reelService',services);
 fillReel('reelReason',reasons);
 fillReel('reelMethod',methods);
-
-function spinReel(el,duration){
-  const total=el.scrollHeight/2;
-  const start=el.scrollTop;
-  const end=start+total;
-  const startTime=performance.now();
-  return new Promise(res=>{
-    function animate(t){
-      const elapsed=t-startTime;
-      const prog=Math.min(elapsed/duration,1);
-      el.scrollTop=start+(end-start)*prog;
-      if(prog<1)requestAnimationFrame(animate);
-      else res();
+function spinReel(el, duration) {
+  const maxScrollTop = el.scrollHeight - el.clientHeight;
+  if (maxScrollTop <= 0) return Promise.resolve();
+  const easeOutQuad = t => t * (2 - t);
+  const start = el.scrollTop;
+  const forwardTarget = maxScrollTop;
+  const startTime = performance.now();
+  return new Promise(resolve => {
+    function forward(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutQuad(progress);
+      el.scrollTop = start + (forwardTarget - start) * eased;
+      if (progress < 1) {
+        requestAnimationFrame(forward);
+      } else {
+        const resetStart = el.scrollTop;
+        const resetStartTime = performance.now();
+        function reset(now) {
+          const elapsed = now - resetStartTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeOutQuad(progress);
+          el.scrollTop = resetStart - resetStart * eased;
+          if (progress < 1) {
+            requestAnimationFrame(reset);
+          } else {
+            el.scrollTop = 0;
+            resolve();
+          }
+        }
+        requestAnimationFrame(reset);
+      }
     }
-    requestAnimationFrame(animate);
+    requestAnimationFrame(forward);
   });
 }
 
