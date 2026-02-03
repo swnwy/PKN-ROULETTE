@@ -202,7 +202,6 @@ const docs = [
   {num:"12-ХУ",title:"О контроле чрезмерной свободы"},
   {num:"276-ФЗ", title:"о VPN-сервисах и анонимайзерах"}
 ];
-const clickSound = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA=");
 
 function randItem(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
@@ -234,7 +233,6 @@ function spinReel(el,duration){
 }
 
 document.getElementById('spinBtn').addEventListener('click',async()=>{
-  clickSound.currentTime=0;clickSound.play();
   const s=document.getElementById('reelService');
   const r=document.getElementById('reelReason');
   const m=document.getElementById('reelMethod');
@@ -246,7 +244,6 @@ document.getElementById('spinBtn').addEventListener('click',async()=>{
 });
 
 document.getElementById('madBtn').addEventListener('click',async()=>{
-  clickSound.currentTime=0;clickSound.play();
   const count=Math.floor(Math.random()*3)+3;
   const chosen=shuffle(services).slice(0,count);
   const s=document.getElementById('reelService');
