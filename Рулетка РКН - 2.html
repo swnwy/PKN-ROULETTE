@@ -200,9 +200,9 @@
 <div class="add-service" id="addServiceBtn">+</div>
 
 <script>
-const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Manero"];
+const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Monero"];
 const reasons = ["Слишком свободно","Нарушает традиционные ценности","Распространение вредоносного кода/фишинг","Переход на иностранную доменную зону без российского представительства","Интеграция с сервисами, проверенными как «враждебные» (например, VPN/мессенджеры с подозрительной репутацией)","Просто так, хочу :D","Публичное выражение идей, противоречащих государственным ценностям (пропаганда ЛГБТ, наркотиков, откровенных сексуальных сцен)","Отсутствие достаточных механизмов борьбы с дезинформацией и фейками","враждебные пиксели","Провокация насилия и терроризма","Пропаганда расовой, национальной, религиозной враждебности","Упомянут в файлах Эпштейна","Основатель сервиса не установил MAX"];
-const methods = ["по IP-адресу","по DNS-серверу","по чёрному списку","через магию отчётов","по настроению регулятора","по фазе луны","через кнопку “Запретить всё”","по секретному реестру"];
+const methods = ["по IP-адресу","по DNS-серверу","по чёрному списку","через магию отчётов","по настроению регулятора","по фазе луны","через кнопку \"Запретить всё\"","по секретному реестру"];
 const docs = [
   {num:"149-ФЗ", title:"Об информации, информационных технологиях и о защите информации"},
   {num:"436-ФЗ", title:"О защите детей от информации, причиняющей вред их здоровью и развитию"},
@@ -212,6 +212,8 @@ const docs = [
   {num:"1000-7-ФЗ",title:"Право банить все подряд"},
   {num:"67-ФЗ",title:"Обязательное размещение гимна в сайте"}
 ];
+
+let isSpinning = false;
 
 function randItem(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
@@ -262,17 +264,47 @@ function spinReel(el, duration) {
 }
 
 document.getElementById('spinBtn').addEventListener('click',async()=>{
+  if(isSpinning) return;
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  const madBtn = document.getElementById('madBtn');
+  btn.disabled = true;
+  madBtn.disabled = true;
+  btn.style.opacity = '0.5';
+  madBtn.style.opacity = '0.5';
+  btn.style.cursor = 'not-allowed';
+  madBtn.style.cursor = 'not-allowed';
+  
   const s=document.getElementById('reelService');
   const r=document.getElementById('reelReason');
   const m=document.getElementById('reelMethod');
   await Promise.all([spinReel(s,2000),spinReel(r,2000),spinReel(m,2000)]);
-  const service=s.children[Math.floor(Math.random()*services.length)].textContent;
-  const reason=r.children[Math.floor(Math.random()*reasons.length)].textContent;
-  const method=m.children[Math.floor(Math.random()*methods.length)].textContent;
+  const service=services[Math.floor(Math.random()*services.length)];
+  const reason=reasons[Math.floor(Math.random()*reasons.length)];
+  const method=methods[Math.floor(Math.random()*methods.length)];
   showResult([{service,reason,method}]);
+  
+  isSpinning = false;
+  btn.disabled = false;
+  madBtn.disabled = false;
+  btn.style.opacity = '1';
+  madBtn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+  madBtn.style.cursor = 'pointer';
 });
 
 document.getElementById('madBtn').addEventListener('click',async()=>{
+  if(isSpinning) return;
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  const madBtn = document.getElementById('madBtn');
+  btn.disabled = true;
+  madBtn.disabled = true;
+  btn.style.opacity = '0.5';
+  madBtn.style.opacity = '0.5';
+  btn.style.cursor = 'not-allowed';
+  madBtn.style.cursor = 'not-allowed';
+  
   const count=Math.floor(Math.random()*3)+3;
   const chosen=shuffle(services).slice(0,count);
   const s=document.getElementById('reelService');
@@ -289,6 +321,14 @@ document.getElementById('madBtn').addEventListener('click',async()=>{
     results.push({service:srv,reason:r,method:m});
   });
   showResult(results);
+  
+  isSpinning = false;
+  btn.disabled = false;
+  madBtn.disabled = false;
+  btn.style.opacity = '1';
+  madBtn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+  madBtn.style.cursor = 'pointer';
 });
 
 function showResult(items){
