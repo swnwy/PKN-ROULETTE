@@ -24,7 +24,10 @@
     line-height:1.4;
   }
   a{color:var(--blue-link);text-decoration:none;}
-  a:hover{text-decoration:underline;}
+  a:hover{
+    text-decoration:underline;
+    color:var(--blue-dark)
+  }
   .header{
     background:var(--bg);
     padding:12px 20px;
@@ -162,6 +165,8 @@
       <li><a href="#">Проверка ресурса</a></li>
       <li><a href="#">Статистика</a></li>
       <li><a href="https://web.max.ru">Документы</a></li>
+      <li>------------------</li>
+      <li><a href="https://github.com/swnwy/PKN-ROULETTE">Github</a></li>
     </ul>
   </aside>
 
@@ -195,7 +200,7 @@
 <div class="add-service" id="addServiceBtn">+</div>
 
 <script>
-const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM"];
+const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Manero"];
 const reasons = ["Слишком свободно","Нарушает традиционные ценности","Распространение вредоносного кода/фишинг","Переход на иностранную доменную зону без российского представительства","Интеграция с сервисами, проверенными как «враждебные» (например, VPN/мессенджеры с подозрительной репутацией)","Просто так, хочу :D","Публичное выражение идей, противоречащих государственным ценностям (пропаганда ЛГБТ, наркотиков, откровенных сексуальных сцен)","Отсутствие достаточных механизмов борьбы с дезинформацией и фейками","враждебные пиксели","Провокация насилия и терроризма","Пропаганда расовой, национальной, религиозной враждебности","Упомянут в файлах Эпштейна","Основатель сервиса не установил MAX"];
 const methods = ["по IP-адресу","по DNS-серверу","по чёрному списку","через магию отчётов","по настроению регулятора","по фазе луны","через кнопку “Запретить всё”","по секретному реестру"];
 const docs = [
@@ -204,7 +209,8 @@ const docs = [
   {num:"12-ХУ",title:"О контроле чрезмерной свободы"},
   {num:"276-ФЗ", title:"О VPN-сервисах и анонимайзерах"},
   {num:"80-ФЗ",  title:"О государственном контроле за оборотом информации"},
-  {num:"1000-7-ФЗ",title:"Право банить все подряд"}
+  {num:"1000-7-ФЗ",title:"Право банить все подряд"},
+  {num:"67-ФЗ",title:"Обязательное размещение гимна в сайте"}
 ];
 
 function randItem(arr){return arr[Math.floor(Math.random()*arr.length)];}
