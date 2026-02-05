@@ -14,7 +14,9 @@
     --border:#cccccc;
     --crazymode-red:#aa0000;
     --ban-button:#cc0000;
-    --ban-btn2:#bb0000
+    --ban-btn2:#bb0000;
+    --achievement-unlocked:#2a8d2a;
+    --achievement-locked:#999999;
   }
   body{
     margin:0;
@@ -143,6 +145,53 @@
     cursor:pointer;
   }
   .add-service:hover{background:var(--gray-mid);}
+  
+  /* Достижения */
+  .achievements-section{
+    margin-top:20px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    padding:10px;
+  }
+  .achievements-header{
+    font-weight:bold;
+    margin-bottom:10px;
+    color:var(--blue-dark);
+    cursor:pointer;
+    user-select:none;
+  }
+  .achievements-header:hover{
+    color:var(--gray-text);
+  }
+  .achievements-list{
+    display:none;
+  }
+  .achievement-item{
+    padding:8px;
+    margin:5px 0;
+    border:1px solid var(--border);
+    background:var(--gray-light);
+    font-size:0.85rem;
+  }
+  .achievement-item.unlocked{
+    background:#e8f5e9;
+    border-color:var(--achievement-unlocked);
+  }
+  .achievement-item.locked{
+    background:var(--gray-mid);
+    color:var(--achievement-locked);
+  }
+  .achievement-title{
+    font-weight:bold;
+    margin-bottom:3px;
+  }
+  .achievement-desc{
+    font-size:0.8rem;
+  }
+  .achievement-new{
+    background:#fff3cd;
+    border-color:#ffc107;
+  }
 </style>
 </head>
 <body>
@@ -190,6 +239,11 @@
     <div class="card" id="resultCard"></div>
     <div class="info" id="counter">Зарплата: 0</div>
     <div class="info" id="index">Индекс цифрового суверенитета: <span id="sovIndex"></span>%</div>
+    
+    <div class="achievements-section">
+      <div class="achievements-header" id="achievementsToggle">Достижения (<span id="achievementCount">0/20</span>) [открыть]</div>
+      <div class="achievements-list" id="achievementsList"></div>
+    </div>
   </section>
 </div>
 
@@ -201,8 +255,8 @@
 
 <script>
 const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Monero"];
-const reasons = ["Слишком свободно","Нарушает традиционные ценности","Распространение вредоносного кода/фишинг","Переход на иностранную доменную зону без российского представительства","Интеграция с сервисами, проверенными как «враждебные» (например, VPN/мессенджеры с подозрительной репутацией)","Просто так, хочу :D","Публичное выражение идей, противоречащих государственным ценностям (пропаганда ЛГБТ, наркотиков, откровенных сексуальных сцен)","Отсутствие достаточных механизмов борьбы с дезинформацией и фейками","враждебные пиксели","Провокация насилия и терроризма","Пропаганда расовой, национальной, религиозной враждебности","Упомянут в файлах Эпштейна","Основатель сервиса не установил MAX"];
-const methods = ["по IP-адресу","по DNS-серверу","по чёрному списку","через магию отчётов","по настроению регулятора","по фазе луны","через кнопку \"Запретить всё\"","по секретному реестру"];
+const reasons = ["Слишком свободно","Нарушает традиционные ценности","Распространение вредоносного кода/фишинг","Переход на иностранную доменную зону без российского представительства","Интеграция с сервисами, проверенными как «враждебные» (например, VPN/мессенджеры с подозрительной репутацией)","Просто так, хочу :D","Публичное выражение идей, противоречащих государственным ценностям (пропаганда ЛГБТ, наркотиков, откровенных сексуальных сцен)","Отсутствие достаточных механизмов борьбы с дезинформацией и фейками","враждебные пиксели","Провокация насилия и терроризма","Пропаганда расовой, национальной, религиозной враждебности","Упомянут в файлах Эпштейна","Основатель сервиса не установил MAX","Логотип похож на запрещённый символ","Слишком удобный интерфейс развращает пользователей","Не отвечает на письма Роскомнадзора","Использует подозрительно много HTTPS","На сайте нет портрета Президента","Цвета интерфейса напоминают флаг недружественной страны","Слишком быстро грузится, явно что-то скрывает","Не платит налоги в бюджет хотя бы символически","Техподдержка отвечает слишком быстро (подозрительно)","Разработчики носят джинсы","Слишком много пользователей из России","Поддержка IPv6 (современные технологии под запретом)"];
+const methods = ["По протоколу (блокировка всего HTTPS)","Через Deep Packet Inspection (DPI)","По SSL fingerprint","Блокировка ASN целиком","По MAC-адресу","Через отравление BGP маршрутов","По User-Agent браузера","Через подмену SSL сертификатов","По докладной записке","По решению межведомственной комиссии","Через включение в реестр запрещённых","Через звонок провайдеру","Через публикацию в Telegram-канале РКН","Методом научного тыка","Через выключение интернета в РФ","По гороскопу","По совету экстрасенса","По результатам соцопроса (0 человек опрошено)","Через танец с бубном у сервера","Через публичное проклятие на брифинге"];
 const docs = [
   {num:"149-ФЗ", title:"Об информации, информационных технологиях и о защите информации"},
   {num:"436-ФЗ", title:"О защите детей от информации, причиняющей вред их здоровью и развитию"},
@@ -213,7 +267,89 @@ const docs = [
   {num:"67-ФЗ",title:"Обязательное размещение гимна в сайте"}
 ];
 
+const achievements = [
+  {id:"first_blood",title:"Первая кровь",desc:"Забань первый сервис",check:s=>s.totalBans>=1},
+  {id:"beginning",title:"Начало?",desc:"Заблокировать 10 сервисов",check:s=>s.totalBans>=10},
+  {id:"beginning2",title:"Начало!",desc:"Заблокировать 50 сервисов",check:s=>s.totalBans>=50},
+  {id:"stop_pls",title:"СТОП, МНЕ НЕПРИЯТНО!",desc:"Заблокировать 100 сервисов",check:s=>s.totalBans>=100},
+  {id:"nooooo",title:"НЕ НАДО ДЯДЯ!!!",desc:"Заблокировать 250 сервисов",check:s=>s.totalBans>=250},
+  {id:"north_korea",title:"Северная Корея",desc:"Забань 500 сервисов",check:s=>s.totalBans>=500}
+];
+
 let isSpinning = false;
+let gameStats = {
+  totalBans: 0,
+  sessionBans: 0,
+  madModeCount: 0,
+  customServices: 0,
+  salary: 0,
+  sovIndex: 70 + Math.floor(Math.random()*31),
+  bannedServices: [],
+  usedMethods: new Set(),
+  usedReasons: new Set(),
+  unlockedAchievements: new Set()
+};
+
+function loadStats(){
+  const saved = localStorage.getItem('rknStats');
+  if(saved){
+    const parsed = JSON.parse(saved);
+    gameStats = {
+      ...parsed,
+      usedMethods: new Set(parsed.usedMethods || []),
+      usedReasons: new Set(parsed.usedReasons || []),
+      unlockedAchievements: new Set(parsed.unlockedAchievements || []),
+      sessionBans: 0
+    };
+    updateUI();
+  }
+}
+
+function saveStats(){
+  const toSave = {
+    ...gameStats,
+    usedMethods: Array.from(gameStats.usedMethods),
+    usedReasons: Array.from(gameStats.usedReasons),
+    unlockedAchievements: Array.from(gameStats.unlockedAchievements)
+  };
+  localStorage.setItem('rknStats', JSON.stringify(toSave));
+}
+
+function updateUI(){
+  document.getElementById('counter').textContent = `Зарплата: ${gameStats.salary}`;
+  document.getElementById('sovIndex').textContent = Math.min(gameStats.sovIndex, 100);
+  updateAchievements();
+}
+
+function checkAchievements(){
+  const newUnlocked = [];
+  achievements.forEach(ach=>{
+    if(!gameStats.unlockedAchievements.has(ach.id) && ach.check(gameStats)){
+      gameStats.unlockedAchievements.add(ach.id);
+      newUnlocked.push(ach);
+    }
+  });
+  return newUnlocked;
+}
+
+function updateAchievements(){
+  const list = document.getElementById('achievementsList');
+  list.innerHTML = '';
+  
+  achievements.forEach(ach=>{
+    const unlocked = gameStats.unlockedAchievements.has(ach.id);
+    const div = document.createElement('div');
+    div.className = `achievement-item ${unlocked ? 'unlocked' : 'locked'}`;
+    div.innerHTML = `
+      <div class="achievement-title">${unlocked ? '✓' : '🔒'} ${ach.title}</div>
+      <div class="achievement-desc">${ach.desc}</div>
+    `;
+    list.appendChild(div);
+  });
+  
+  const count = gameStats.unlockedAchievements.size;
+  document.getElementById('achievementCount').textContent = `${count}/${achievements.length}`;
+}
 
 function randItem(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
@@ -226,6 +362,7 @@ function fillReel(id, items){
 fillReel('reelService',services);
 fillReel('reelReason',reasons);
 fillReel('reelMethod',methods);
+
 function spinReel(el, duration) {
   const maxScrollTop = el.scrollHeight - el.clientHeight;
   if (maxScrollTop <= 0) return Promise.resolve();
@@ -282,7 +419,29 @@ document.getElementById('spinBtn').addEventListener('click',async()=>{
   const service=services[Math.floor(Math.random()*services.length)];
   const reason=reasons[Math.floor(Math.random()*reasons.length)];
   const method=methods[Math.floor(Math.random()*methods.length)];
+  
+
+  gameStats.totalBans++;
+  gameStats.sessionBans++;
+  gameStats.salary++;
+  gameStats.sovIndex = Math.min(gameStats.sovIndex + 1, 100);
+  if(!gameStats.bannedServices.includes(service)){
+    gameStats.bannedServices.push(service);
+  }
+  gameStats.usedMethods.add(method);
+  gameStats.usedReasons.add(reason);
+  
   showResult([{service,reason,method}]);
+  
+  const newAchievements = checkAchievements();
+  if(newAchievements.length > 0){
+    setTimeout(()=>{
+      updateAchievements();
+    }, 500);
+  }
+  
+  saveStats();
+  updateUI();
   
   isSpinning = false;
   btn.disabled = false;
@@ -320,7 +479,31 @@ document.getElementById('madBtn').addEventListener('click',async()=>{
     usedM.push(m);
     results.push({service:srv,reason:r,method:m});
   });
+  
+  gameStats.totalBans += count;
+  gameStats.sessionBans += count;
+  gameStats.madModeCount++;
+  gameStats.salary += count;
+  gameStats.sovIndex = Math.min(gameStats.sovIndex + count * 2, 100);
+  results.forEach(res=>{
+    if(!gameStats.bannedServices.includes(res.service)){
+      gameStats.bannedServices.push(res.service);
+    }
+    gameStats.usedMethods.add(res.method);
+    gameStats.usedReasons.add(res.reason);
+  });
+  
   showResult(results);
+  
+  const newAchievements = checkAchievements();
+  if(newAchievements.length > 0){
+    setTimeout(()=>{
+      updateAchievements();
+    }, 500);
+  }
+  
+  saveStats();
+  updateUI();
   
   isSpinning = false;
   btn.disabled = false;
@@ -342,20 +525,27 @@ function showResult(items){
             <br><strong>Нормативное обоснование:</strong><br>${docList}<hr>`;
   }).join('');
   card.style.display='block';
-  const counter=document.getElementById('counter');
-  const cur=parseInt(counter.textContent.match(/\d+/)[0]);
-  counter.textContent=`Зарплата: ${cur+items.length}`;
 }
 
-document.getElementById('sovIndex').textContent=(70+Math.floor(Math.random()*31)).toString();
+document.getElementById('achievementsToggle').addEventListener('click',()=>{
+  const list = document.getElementById('achievementsList');
+  list.style.display = list.style.display === 'none' ? 'block' : 'none';
+});
 
 document.getElementById('addServiceBtn').addEventListener('click',()=>{
   const name=prompt("Введите название сервиса");
   if(name && name.trim()){
     services.push(name.trim());
     fillReel('reelService',services);
+    gameStats.customServices++;
+    saveStats();
+    checkAchievements();
+    updateAchievements();
   }
 });
+
+loadStats();
+updateAchievements();
 </script>
 </body>
 </html>
