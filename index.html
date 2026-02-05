@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>РКН рулетка</title>
+<style>
+  :root{
+    --bg:#ffffff;
+    --gray-light:#f2f2f2;
+    --gray-mid:#e5e5e5;
+    --gray-text:#333333;
+    --blue-dark:#2a4b8d;
+    --blue-link:#0066cc;
+    --border:#cccccc;
+    --crazymode-red:#aa0000;
+    --ban-button:#cc0000;
+    --ban-btn2:#bb0000;
+    --achievement-unlocked:#2a8d2a;
+    --achievement-locked:#999999;
+  }
+  body{
+    margin:0;
+    font-family:system-ui,Arial,sans-serif;
+    background:var(--bg);
+    color:var(--gray-text);
+    line-height:1.4;
+  }
+  a{color:var(--blue-link);text-decoration:none;}
+  a:hover{
+    text-decoration:underline;
+    color:var(--blue-dark)
+  }
+  .header{
+    background:var(--bg);
+    padding:12px 20px;
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+  }
+  .logo{
+    font-size:1.6rem;
+    font-weight:bold;
+    color:var(--blue-dark);
+    margin-right:10px;
+  }
+  .sublogo{
+    font-size:1rem;
+    color:var(--gray-text);
+  }
+  .nav{
+    background:var(--gray-light);
+    padding:8px 20px;
+    font-size:0.9rem;
+    border-bottom:1px solid var(--border);
+  }
+  .container{
+    max-width:960px;
+    margin:20px auto;
+    display:flex;
+    background:var(--bg);
+    border:1px solid var(--border);
+  }
+  .sidebar{
+    width:200px;
+    background:var(--gray-mid);
+    padding:15px;
+    font-size:0.9rem;
+    color:var(--gray-text);
+  }
+  .content{
+    flex:1;
+    padding:15px;
+  }
+  .form-box{
+    background:var(--bg);
+    border:1px solid var(--border);
+    padding:10px;
+    margin-bottom:15px;
+  }
+  .reel{
+    height:120px;
+    overflow-y:auto;
+    border:1px solid var(--border);
+    margin-bottom:10px;
+    font-size:0.95rem;
+    color:#000;
+  }
+  .reel div{
+    padding:4px 0;
+    border-bottom:1px solid var(--gray-mid);
+  }
+
+  .btn-crazymode{
+    padding:6px 12px;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:1px solid var(--border);
+    background:var(--gray-light);
+    color:var(--gray-text);
+    margin-right:8px;
+  }
+  .btn-crazymode:hover{
+    background:var(--crazymode-red);
+    color:#fff;
+  }
+  .btn{
+    padding:6px 12px;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:1px solid var(--border);
+    background:var(--gray-light);
+    color:var(--gray-text);
+    margin-right:8px;
+  }
+  .btn:hover{background:var(--gray-mid);}
+  .btn-primary{
+    background:var(--ban-button);
+    color:#fff;
+    border-color:var(--ban-btn2);
+  }
+  .btn-primary:hover{background:#bc0000;}
+  .card{
+    background:var(--gray-light);
+    border:1px solid var(--border);
+    padding:10px;
+    font-size:0.9rem;
+    margin-top:10px;
+    display:none;
+  }
+  .info{margin-top:10px;font-size:0.9rem;}
+  .footer{
+    text-align:center;
+    font-size:0.85rem;
+    color:var(--gray-text);
+    margin:30px 0 10px;
+  }
+  .add-service{
+    position:fixed;
+    left:10px;
+    bottom:10px;
+    padding:4px 8px;
+    font-size:0.8rem;
+    background:var(--gray-light);
+    border:1px solid var(--border);
+    cursor:pointer;
+  }
+  .add-service:hover{background:var(--gray-mid);}
+  
+  .achievements-section{
+    margin-top:20px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    padding:10px;
+  }
+  .achievements-header{
+    font-weight:bold;
+    margin-bottom:10px;
+    color:var(--blue-dark);
+    cursor:pointer;
+    user-select:none;
+  }
+  .achievements-header:hover{
+    color:var(--gray-text);
+  }
+  .achievements-list{
+    display:none;
+  }
+  .achievement-item{
+    padding:8px;
+    margin:5px 0;
+    border:1px solid var(--border);
+    background:var(--gray-light);
+    font-size:0.85rem;
+  }
+  .achievement-item.unlocked{
+    background:#e8f5e9;
+    border-color:var(--achievement-unlocked);
+  }
+  .achievement-item.locked{
+    background:var(--gray-mid);
+    color:var(--achievement-locked);
+  }
+  .achievement-title{
+    font-weight:bold;
+    margin-bottom:3px;
+  }
+  .achievement-desc{
+    font-size:0.8rem;
+  }
+  .achievement-new{
+    background:#fff3cd;
+    border-color:#ffc107;
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">РОСКОМНАДЗОР</div>
+  <div class="sublogo">рулетка (open beta)</div>
+</header>
+
+<nav class="nav">
+  <a href="https://max.ru">Главная</a>
+  <a href="#">О сервисе</a>
+  <a href="https://swnwy.t.me">Контакты</a>
+</nav>
+
+<div class="container">
+  <aside class="sidebar">
+    <strong>Меню</strong>
+    <ul style="list-style:none;padding-left:0;">
+      <li><a href="#">Проверка ресурса</a></li>
+      <li><a href="#">Статистика</a></li>
+      <li><a href="https://web.max.ru">Документы</a></li>
+      <li>------------------</li>
+      <li><a href="https://github.com/swnwy/PKN-ROULETTE">Github</a></li>
+    </ul>
+  </aside>
+
+  <section class="content">
+    <h2 style="color:var(--blue-dark);margin-top:0;">РОСКОМНАДЗОР РУЛЕТКА</h2>
+
+    <div class="form-box">
+      <label style="font-weight:bold;">Сервис</label>
+      <div class="reel" id="reelService"></div>
+
+      <label style="font-weight:bold;">Обвиняем в</label>
+      <div class="reel" id="reelReason"></div>
+
+      <label style="font-weight:bold;">Способ блокировки</label>
+      <div class="reel" id="reelMethod"></div>
+    </div>
+
+    <button class="btn btn-primary" id="spinBtn">Заблокировать</button>
+    <button class="btn-crazymode" id="madBtn">Режим безумия (x5!)</button>
+
+    <div class="card" id="resultCard"></div>
+    <div class="info" id="counter">Зарплата: 0</div>
+    <div class="info" id="index">Индекс цифрового суверенитета: <span id="sovIndex"></span>%</div>
+    
+    <div class="achievements-section">
+      <div class="achievements-header" id="achievementsToggle">Достижения (<span id="achievementCount">0/20</span>) [открыть]</div>
+      <div class="achievements-list" id="achievementsList"></div>
+    </div>
+  </section>
+</div>
+
+<div class="footer">Игру создал @swnwy. Исходный код есть в Github.</div>
+<div class="footer">Я не захостил все это, так как я бомж без денег.</div>
+<div class="footer">1 блокировка - 1 рубль. ПОЛУЧИ 1000000.</div>
+
+<div class="add-service" id="addServiceBtn">+</div>
+
+<script>
+const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Monero"];
+const reasons = ["Слишком свободно","Нарушает традиционные ценности","Распространение вредоносного кода/фишинг","Переход на иностранную доменную зону без российского представительства","Интеграция с сервисами, проверенными как «враждебные» (например, VPN/мессенджеры с подозрительной репутацией)","Просто так, хочу :D","Публичное выражение идей, противоречащих государственным ценностям (пропаганда ЛГБТ, наркотиков, откровенных сексуальных сцен)","Отсутствие достаточных механизмов борьбы с дезинформацией и фейками","враждебные пиксели","Провокация насилия и терроризма","Пропаганда расовой, национальной, религиозной враждебности","Упомянут в файлах Эпштейна","Основатель сервиса не установил MAX","Логотип похож на запрещённый символ","Слишком удобный интерфейс развращает пользователей","Не отвечает на письма Роскомнадзора","Использует подозрительно много HTTPS","На сайте нет портрета Президента","Цвета интерфейса напоминают флаг недружественной страны","Слишком быстро грузится, явно что-то скрывает","Не платит налоги в бюджет хотя бы символически","Техподдержка отвечает слишком быстро (подозрительно)","Разработчики носят джинсы","Слишком много пользователей из России","Поддержка IPv6 (современные технологии под запретом)"];
+const methods = ["По протоколу (блокировка всего HTTPS)","Через Deep Packet Inspection (DPI)","По SSL fingerprint","Блокировка ASN целиком","По MAC-адресу","Через отравление BGP маршрутов","По User-Agent браузера","Через подмену SSL сертификатов","По докладной записке","По решению межведомственной комиссии","Через включение в реестр запрещённых","Через звонок провайдеру","Через публикацию в Telegram-канале РКН","Методом научного тыка","Через выключение интернета в РФ","По гороскопу","По совету экстрасенса","По результатам соцопроса (0 человек опрошено)","Через танец с бубном у сервера","Через публичное проклятие на брифинге"];
+const docs = [
+  {num:"149-ФЗ", title:"Об информации, информационных технологиях и о защите информации"},
+  {num:"436-ФЗ", title:"О защите детей от информации, причиняющей вред их здоровью и развитию"},
+  {num:"12-ХУ",title:"О контроле чрезмерной свободы"},
+  {num:"276-ФЗ", title:"О VPN-сервисах и анонимайзерах"},
+  {num:"80-ФЗ",  title:"О государственном контроле за оборотом информации"},
+  {num:"1000-7-ФЗ",title:"Право банить все подряд"},
+  {num:"67-ФЗ",title:"Обязательное размещение гимна в сайте"}
+];
+
+const achievements = [
+  {id:"first_blood",title:"Первая кровь",desc:"Забань первый сервис",check:s=>s.totalBans>=1},
+  {id:"beginning",title:"Начало?",desc:"Заблокировать 10 сервисов",check:s=>s.totalBans>=10},
+  {id:"beginning2",title:"Начало!",desc:"Заблокировать 50 сервисов",check:s=>s.totalBans>=50},
+  {id:"stop_pls",title:"СТОП, МНЕ НЕПРИЯТНО!",desc:"Заблокировать 100 сервисов",check:s=>s.totalBans>=100},
+  {id:"nooooo",title:"НЕ НАДО ДЯДЯ!!!",desc:"Заблокировать 250 сервисов",check:s=>s.totalBans>=250},
+  {id:"north_korea",title:"Северная Корея",desc:"Забань 500 сервисов",check:s=>s.totalBans>=500},
+  {id:"its_bad",title:"РКН 2026",desc:"Использовать режим безумия 10 раз",check:s=>s.madModeCount>=10},
+  {id:"five_new",title:"Это кто-то сделал?",desc:"Добавить 5 своих сервисов",check:s=>s.customServices>=5},
+  {id:"rich",title:"Валера",desc:"Заработай сотку",check:s=>s.salary>=100},
+  {id:"pay",title:"Зарплата!",desc:"Заработай косарь",check:s=>s.salary>=1000},
+  {id:"millionaire",title:"КАК ТЫ СДЕСЬ ОКАЗАЛСЯ?",desc:"я не знаю, что сказать...",check:s=>s.salary>=1000000},
+  {id:"russia_svashenaya_masha_dershava",title:"Патриот",desc:"Слови 100% индекса цифрового суверенитета",check:s=>s.sovIndex>=100},
+  {id:"github_shot",title:"Выстрел в ногу",desc:"Заблокировать GitHub (источник этой игры)",check:s=>s.bannedServices.includes("GitHub")},
+  {id:"vpn",title:"#НетVPN",desc:"Заблокировать VPN, Tor, Signal и Briar",check:s=>["VPN","Tor","Signal","Briar"].every(v=>s.bannedServices.includes(v))},
+  {id:"freedoom",title:"Свобода Слова",desc:"Заблокировать Telegram, Discord, Signal и WhatsApp",check:s=>["Telegram","Discord","Signal"].every(v=>s.bannedServices.includes(v))},
+  {id:"big_bro",title:"Против корпораций",desc:"Заблокировать Google, Apple, Microsoft и Amazon",check:s=>["Google","Apple","Microsoft","Amazon"].every(v=>s.bannedServices.includes(v))},
+  {id:"impossible",title:"Невозможное возможно",desc:"Заблокировать децентрализованный сервис (Tor, Bitcoin или Monero)",check:s=>["Tor","Bitcoin","Monero"].some(v=>s.bannedServices.includes(v))},
+  {id:"ten",title:"Отмазки",desc:"Использовать 10 разных методов блокировки",check:s=>s.usedMethods.size>=10},
+  {id:"fiveteen",title:"...",desc:"Использовать 15 разных причин блокировки",check:s=>s.usedReasons.size>=15},
+  {id:"speed_demon",title:"Спидраннер",desc:"Заблокировать 20 сервисов за одну сессию",check:s=>s.sessionBans>=20}
+];
+
+let isSpinning = false;
+let gameStats = {
+  totalBans: 0,
+  sessionBans: 0,
+  madModeCount: 0,
+  customServices: 0,
+  salary: 0,
+  sovIndex: 70 + Math.floor(Math.random()*31),
+  bannedServices: [],
+  usedMethods: new Set(),
+  usedReasons: new Set(),
+  unlockedAchievements: new Set()
+};
+
+function loadStats(){
+  const saved = localStorage.getItem('rknStats');
+  if(saved){
+    const parsed = JSON.parse(saved);
+    gameStats = {
+      ...parsed,
+      usedMethods: new Set(parsed.usedMethods || []),
+      usedReasons: new Set(parsed.usedReasons || []),
+      unlockedAchievements: new Set(parsed.unlockedAchievements || []),
+      sessionBans: 0
+    };
+    updateUI();
+  }
+}
+
+function saveStats(){
+  const toSave = {
+    ...gameStats,
+    usedMethods: Array.from(gameStats.usedMethods),
+    usedReasons: Array.from(gameStats.usedReasons),
+    unlockedAchievements: Array.from(gameStats.unlockedAchievements)
+  };
+  localStorage.setItem('rknStats', JSON.stringify(toSave));
+}
+
+function updateUI(){
+  document.getElementById('counter').textContent = `Зарплата: ${gameStats.salary}`;
+  document.getElementById('sovIndex').textContent = Math.min(gameStats.sovIndex, 100);
+  updateAchievements();
+}
+
+function checkAchievements(){
+  const newUnlocked = [];
+  achievements.forEach(ach=>{
+    if(!gameStats.unlockedAchievements.has(ach.id) && ach.check(gameStats)){
+      gameStats.unlockedAchievements.add(ach.id);
+      newUnlocked.push(ach);
+    }
+  });
+  return newUnlocked;
+}
+
+function updateAchievements(){
+  const list = document.getElementById('achievementsList');
+  list.innerHTML = '';
+  
+  achievements.forEach(ach=>{
+    const unlocked = gameStats.unlockedAchievements.has(ach.id);
+    const div = document.createElement('div');
+    div.className = `achievement-item ${unlocked ? 'unlocked' : 'locked'}`;
+    div.innerHTML = `
+      <div class="achievement-title">${unlocked ? '✓' : '🔒'} ${ach.title}</div>
+      <div class="achievement-desc">${ach.desc}</div>
+    `;
+    list.appendChild(div);
+  });
+  
+  const count = gameStats.unlockedAchievements.size;
+  document.getElementById('achievementCount').textContent = `${count}/${achievements.length}`;
+}
+
+function randItem(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]).map(v=>v[1]);}
+
+function fillReel(id, items){
+  const el=document.getElementById(id);
+  el.innerHTML='';
+  items.forEach(t=>{const d=document.createElement('div');d.textContent=t;el.appendChild(d);});
+}
+fillReel('reelService',services);
+fillReel('reelReason',reasons);
+fillReel('reelMethod',methods);
+
+function spinReel(el, duration) {
+  const maxScrollTop = el.scrollHeight - el.clientHeight;
+  if (maxScrollTop <= 0) return Promise.resolve();
+  const easeOutQuad = t => t * (2 - t);
+  const start = el.scrollTop;
+  const forwardTarget = maxScrollTop;
+  const startTime = performance.now();
+  return new Promise(resolve => {
+    function forward(now) {
+      const elapsed = now - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = easeOutQuad(progress);
+      el.scrollTop = start + (forwardTarget - start) * eased;
+      if (progress < 1) {
+        requestAnimationFrame(forward);
+      } else {
+        const resetStart = el.scrollTop;
+        const resetStartTime = performance.now();
+        function reset(now) {
+          const elapsed = now - resetStartTime;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = easeOutQuad(progress);
+          el.scrollTop = resetStart - resetStart * eased;
+          if (progress < 1) {
+            requestAnimationFrame(reset);
+          } else {
+            el.scrollTop = 0;
+            resolve();
+          }
+        }
+        requestAnimationFrame(reset);
+      }
+    }
+    requestAnimationFrame(forward);
+  });
+}
+
+document.getElementById('spinBtn').addEventListener('click',async()=>{
+  if(isSpinning) return;
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  const madBtn = document.getElementById('madBtn');
+  btn.disabled = true;
+  madBtn.disabled = true;
+  btn.style.opacity = '0.5';
+  madBtn.style.opacity = '0.5';
+  btn.style.cursor = 'not-allowed';
+  madBtn.style.cursor = 'not-allowed';
+  
+  const s=document.getElementById('reelService');
+  const r=document.getElementById('reelReason');
+  const m=document.getElementById('reelMethod');
+  await Promise.all([spinReel(s,2000),spinReel(r,2000),spinReel(m,2000)]);
+  const service=services[Math.floor(Math.random()*services.length)];
+  const reason=reasons[Math.floor(Math.random()*reasons.length)];
+  const method=methods[Math.floor(Math.random()*methods.length)];
+  
+
+  gameStats.totalBans++;
+  gameStats.sessionBans++;
+  gameStats.salary++;
+  gameStats.sovIndex = Math.min(gameStats.sovIndex + 1, 100);
+  if(!gameStats.bannedServices.includes(service)){
+    gameStats.bannedServices.push(service);
+  }
+  gameStats.usedMethods.add(method);
+  gameStats.usedReasons.add(reason);
+  
+  showResult([{service,reason,method}]);
+  
+  const newAchievements = checkAchievements();
+  if(newAchievements.length > 0){
+    setTimeout(()=>{
+      updateAchievements();
+    }, 500);
+  }
+  
+  saveStats();
+  updateUI();
+  
+  isSpinning = false;
+  btn.disabled = false;
+  madBtn.disabled = false;
+  btn.style.opacity = '1';
+  madBtn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+  madBtn.style.cursor = 'pointer';
+});
+
+document.getElementById('madBtn').addEventListener('click',async()=>{
+  if(isSpinning) return;
+  isSpinning = true;
+  const btn = document.getElementById('spinBtn');
+  const madBtn = document.getElementById('madBtn');
+  btn.disabled = true;
+  madBtn.disabled = true;
+  btn.style.opacity = '0.5';
+  madBtn.style.opacity = '0.5';
+  btn.style.cursor = 'not-allowed';
+  madBtn.style.cursor = 'not-allowed';
+  
+  const count=Math.floor(Math.random()*3)+3;
+  const chosen=shuffle(services).slice(0,count);
+  const s=document.getElementById('reelService');
+  const r=document.getElementById('reelReason');
+  const m=document.getElementById('reelMethod');
+  await Promise.all([spinReel(s,2500),spinReel(r,2500),spinReel(m,2500)]);
+  const results=[];
+  const usedR=[];const usedM=[];
+  chosen.forEach(srv=>{
+    let r;do{r=randItem(reasons);}while(usedR.includes(r));
+    usedR.push(r);
+    let m;do{m=randItem(methods);}while(usedM.includes(m));
+    usedM.push(m);
+    results.push({service:srv,reason:r,method:m});
+  });
+  
+  gameStats.totalBans += count;
+  gameStats.sessionBans += count;
+  gameStats.madModeCount++;
+  gameStats.salary += count;
+  gameStats.sovIndex = Math.min(gameStats.sovIndex + count * 2, 100);
+  results.forEach(res=>{
+    if(!gameStats.bannedServices.includes(res.service)){
+      gameStats.bannedServices.push(res.service);
+    }
+    gameStats.usedMethods.add(res.method);
+    gameStats.usedReasons.add(res.reason);
+  });
+  
+  showResult(results);
+  
+  const newAchievements = checkAchievements();
+  if(newAchievements.length > 0){
+    setTimeout(()=>{
+      updateAchievements();
+    }, 500);
+  }
+  
+  saveStats();
+  updateUI();
+  
+  isSpinning = false;
+  btn.disabled = false;
+  madBtn.disabled = false;
+  btn.style.opacity = '1';
+  madBtn.style.opacity = '1';
+  btn.style.cursor = 'pointer';
+  madBtn.style.cursor = 'pointer';
+});
+
+function showResult(items){
+  const card=document.getElementById('resultCard');
+  card.innerHTML=items.map(it=>{
+    const docsChosen=shuffle(docs).slice(0,Math.floor(Math.random()*2)+1);
+    const docList=docsChosen.map(d=>`• Федеральный закон № ${d.num} – «${d.title}»`).join('<br>');
+    return `<strong>Сервис:</strong> ${it.service}<br>
+            <strong>Обвиняем в:</strong> ${it.reason}<br>
+            <strong>Способ запрета:</strong> ${it.method}<br>
+            <br><strong>Нормативное обоснование:</strong><br>${docList}<hr>`;
+  }).join('');
+  card.style.display='block';
+}
+
+document.getElementById('achievementsToggle').addEventListener('click',()=>{
+  const list = document.getElementById('achievementsList');
+  list.style.display = list.style.display === 'none' ? 'block' : 'none';
+});
+
+document.getElementById('addServiceBtn').addEventListener('click',()=>{
+  const name=prompt("Введите название сервиса");
+  if(name && name.trim()){
+    services.push(name.trim());
+    fillReel('reelService',services);
+    gameStats.customServices++;
+    saveStats();
+    checkAchievements();
+    updateAchievements();
+  }
+});
+
+loadStats();
+updateAchievements();
+</script>
+</body>
+</html>
