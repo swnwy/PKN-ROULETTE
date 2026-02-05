@@ -146,7 +146,6 @@
   }
   .add-service:hover{background:var(--gray-mid);}
   
-  /* Достижения */
   .achievements-section{
     margin-top:20px;
     background:var(--bg);
@@ -273,7 +272,14 @@ const achievements = [
   {id:"beginning2",title:"Начало!",desc:"Заблокировать 50 сервисов",check:s=>s.totalBans>=50},
   {id:"stop_pls",title:"СТОП, МНЕ НЕПРИЯТНО!",desc:"Заблокировать 100 сервисов",check:s=>s.totalBans>=100},
   {id:"nooooo",title:"НЕ НАДО ДЯДЯ!!!",desc:"Заблокировать 250 сервисов",check:s=>s.totalBans>=250},
-  {id:"north_korea",title:"Северная Корея",desc:"Забань 500 сервисов",check:s=>s.totalBans>=500}
+  {id:"north_korea",title:"Северная Корея",desc:"Забань 500 сервисов",check:s=>s.totalBans>=500},
+  {id:"its_bad",title:"РКН 2026",desc:"Использовать режим безумия 10 раз",check:s=>s.madModeCount>=10},
+  {id:"five_new",title:"Это кто-то сделал?",desc:"Добавить 5 своих сервисов",check:s=>s.customServices>=5},
+  {id:"rich",title:"Валера",desc:"Заработай сотку",check:s=>s.salary>=100},
+  {id:"pay",title:"Зарплата!",desc:"Заработай косарь",check:s=>s.salary>=1000},
+  {id:"millionaire",title:"КАК ТЫ СДЕСЬ ОКАЗАЛСЯ?",desc:"я не знаю, что сказать...",check:s=>s.salary>=1000000},
+  {id:"russia_svashenaya_masha_dershava",title:"Патриот",desc:"Слови 100% индекса цифрового суверенитета",check:s=>s.sovIndex>=100},
+  {id:"github_shot",title:"Выстрел в ногу",desc:"Заблокировать GitHub (источник этой игры)",check:s=>s.bannedServices.includes("GitHub")}
 ];
 
 let isSpinning = false;
