@@ -191,6 +191,89 @@
     background:#fff3cd;
     border-color:#ffc107;
   }
+  .tabs{
+    display:flex;
+    gap:3px;
+    margin-bottom:12px;
+    border-bottom:2px solid var(--border);
+  }
+  .tab-btn{
+    padding:5px 12px;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:1px solid var(--border);
+    border-bottom:none;
+    background:var(--gray-mid);
+    color:var(--gray-text);
+    position:relative;
+    bottom:-2px;
+  }
+  .tab-btn.active{
+    background:var(--bg);
+    color:var(--blue-dark);
+    font-weight:bold;
+    border-bottom:2px solid var(--bg);
+  }
+  .tab-panel{display:none;}
+  .tab-panel.active{display:block;}
+  .letter-wrap{
+    min-height:340px;
+    position:relative;
+    padding-bottom:60px;
+  }
+  .letter-notice{
+    font-size:0.95rem;
+    color:var(--blue-link);
+    margin-bottom:10px;
+  }
+  .letter-big{
+    font-size:8rem;
+    font-weight:bold;
+    color:var(--blue-dark);
+    text-align:center;
+    display:block;
+    margin:10px 0;
+    transition:opacity 0.1s;
+  }
+  .letter-big.spin{opacity:0.08;}
+  .letter-lang{
+    text-align:center;
+    font-size:0.8rem;
+    color:#999;
+    margin-bottom:8px;
+  }
+  .letter-ban-btn{
+    position:absolute;
+    bottom:10px;
+    right:0;
+    padding:6px 12px;
+    font-size:0.9rem;
+    cursor:pointer;
+    border:1px solid var(--ban-btn2);
+    background:var(--ban-button);
+    color:#fff;
+  }
+  .letter-ban-btn:hover{background:#bc0000;}
+  .letter-ban-btn:disabled{opacity:0.4;cursor:not-allowed;}
+  .letter-stats{font-size:0.85rem;color:var(--gray-text);margin-bottom:6px;}
+  .letter-log{
+    border-top:1px solid var(--border);
+    padding-top:6px;
+    font-size:0.82rem;
+    max-height:90px;
+    overflow-y:auto;
+  }
+  .letter-log div{padding:2px 0;border-bottom:1px solid var(--gray-mid);}
+  .ркн{
+    display:inline-block;
+    background:#111;
+    width:0.55em;
+    height:0.85em;
+    vertical-align:middle;
+    border-radius:1px;
+    overflow:hidden;
+    color:transparent;
+  }
 </style>
 </head>
 <body>
@@ -221,6 +304,12 @@
   <section class="content">
     <h2 style="color:var(--blue-dark);margin-top:0;">РОСКОМНАДЗОР РУЛЕТКА</h2>
 
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="roulette">Рулетка</button>
+      <button class="tab-btn" data-tab="letter">Запрет буквы</button>
+    </div>
+
+    <div class="tab-panel active" id="tab-roulette">
     <div class="form-box">
       <label style="font-weight:bold;">Сервис</label>
       <div class="reel" id="reelService"></div>
@@ -234,6 +323,7 @@
 
     <button class="btn btn-primary" id="spinBtn">Заблокировать</button>
     <button class="btn-crazymode" id="madBtn">Режим безумия (x5!)</button>
+    <button class="btn" id="nukeBtn" style="background:#000;color:#fff;border-color:#000;">Запретить нахуй все</button>
 
     <div class="card" id="resultCard"></div>
     <div class="info" id="counter">Зарплата: 0</div>
@@ -243,6 +333,19 @@
       <div class="achievements-header" id="achievementsToggle">Достижения (<span id="achievementCount">0/20</span>) [открыть]</div>
       <div class="achievements-list" id="achievementsList"></div>
     </div>
+    </div>
+
+    <div class="tab-panel" id="tab-letter">
+      <div class="letter-wrap">
+        <div class="letter-notice" id="letterNotice">Нажми кнопку, чтобы запретить букву</div>
+        <div class="letter-big" id="letterBig">?</div>
+        <div class="letter-lang" id="letterLang"></div>
+        <div class="letter-stats" id="letterStats">Запрещено букв: 0</div>
+        <div class="letter-log" id="letterLog"></div>
+        <button class="letter-ban-btn" id="letterBanBtn">запретить</button>
+      </div>
+    </div>
+
   </section>
 </div>
 
@@ -253,7 +356,7 @@
 <div class="add-service" id="addServiceBtn">+</div>
 
 <script>
-const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Monero"];
+const services = ["YouTube","TikTok","Telegram","Discord","Steam","Netflix","Wikipedia","Reddit","Spotify","Twitch","Google","Instagram","X(Twitter)","GitHub","Max","Yandex","Signal","Briar","VPN","Microsoft","Roblox","Apple","Amazon","eBay","Etsy","LinkedIn","Pinterest","Snapchat","Vimeo","Dailymotion","Quora","Medium","Flickr","WordPress","Blogger","Slack","Zoom","Microsoft Teams","GoogleMeet","Skype","Notion","Evernote","Dropbox","Google Drive","OneDrive","iCloud","Box","Dropbox Paper","Trello","Asana","Jira","GitLab","Bitbucket","Adobe Creative Cloud","Figma","Canva","Shutterstock","Behance","Unsplash","Stack Overflow","Stack Exchange","Google Scholar","Yelp","TripAdvisor","OpenStreetMap","Google Maps","Apple Maps","Bing","DuckDuckGo","Baidu","Yandex.Search","Reddit","Hacker News","GitHub Gist","Google Docs","GoogleSheets","Google Slides","Google Forms","Google Calendar","Google Keep","Google Translate","Google Earth","Google News","Google Podcasts","Google Books","Google Shopping","Google Drive","Microsoft Outlook","Gmail","Yahoo Mail","ProtonMail","Zoho Mail","Fastmail","Zoho Docs","Office 365","LibreOffice","OpenOffice","WPS Office","Zoho CRM","Tor","Zapret","Bitcoin","Monero","Mastodon","Bluesky","Threads","BeReal","VKontakte","Odnoklassniki","Пикабу","Хабр","Авито","Кинопоиск","IVI","Okko","Rutube","Яндекс.Музыка","Яндекс.Дзен","HeadHunter","Wildberries","Ozon","2GIS","Tutanota","ProtonVPN","Mullvad","Windscribe","Psiphon","i2p","Freenet","GitLab","Codeberg","Replit","CodePen","Vercel","Netlify","Docker Hub","Hugging Face","crates.io","PyPI","npm","OpenAI","Anthropic","Gemini","Perplexity","Mistral","Grok","DeepSeek","Midjourney","Ethereum","Binance","Coinbase","Kraken","Monero","Sci-Hub","LibGen","Z-Library","Archive.org","Arxiv","Lichess","Chess.com","Patreon","PayPal","Stripe","Wise","Revolut","Bitwarden","Have I Been Pwned","Epic Games","itch.io","GOG","Battle.net"];
 const reasons = ["Слишком свободно","Нарушает традиционные ценности","Распространение вредоносного кода/фишинг","Переход на иностранную доменную зону без российского представительства","Интеграция с сервисами, проверенными как «враждебные» (например, VPN/мессенджеры с подозрительной репутацией)","Просто так, хочу :D","Публичное выражение идей, противоречащих государственным ценностям (пропаганда ЛГБТ, наркотиков, откровенных сексуальных сцен)","Отсутствие достаточных механизмов борьбы с дезинформацией и фейками","враждебные пиксели","Провокация насилия и терроризма","Пропаганда расовой, национальной, религиозной враждебности","Упомянут в файлах Эпштейна","Основатель сервиса не установил MAX","Логотип похож на запрещённый символ","Слишком удобный интерфейс развращает пользователей","Не отвечает на письма Роскомнадзора","Использует подозрительно много HTTPS","На сайте нет портрета Президента","Цвета интерфейса напоминают флаг недружественной страны","Слишком быстро грузится, явно что-то скрывает","Не платит налоги в бюджет хотя бы символически","Техподдержка отвечает слишком быстро (подозрительно)","Разработчики носят джинсы","Слишком много пользователей из России","Поддержка IPv6 (современные технологии под запретом)"];
 const methods = ["По протоколу (блокировка всего HTTPS)","Через Deep Packet Inspection (DPI)","По SSL fingerprint","Блокировка ASN целиком","По MAC-адресу","Через отравление BGP маршрутов","По User-Agent браузера","Через подмену SSL сертификатов","По докладной записке","По решению межведомственной комиссии","Через включение в реестр запрещённых","Через звонок провайдеру","Через публикацию в Telegram-канале РКН","Методом научного тыка","Через выключение интернета в РФ","По гороскопу","По совету экстрасенса","По результатам соцопроса (0 человек опрошено)","Через танец с бубном у сервера","Через публичное проклятие на брифинге"];
 const docs = [
@@ -286,7 +389,9 @@ const achievements = [
   {id:"impossible",title:"Невозможное возможно",desc:"Заблокировать децентрализованный сервис (Tor, Bitcoin или Monero)",check:s=>["Tor","Bitcoin","Monero"].some(v=>s.bannedServices.includes(v))},
   {id:"ten",title:"Отмазки",desc:"Использовать 10 разных методов блокировки",check:s=>s.usedMethods.size>=10},
   {id:"fiveteen",title:"...",desc:"Использовать 15 разных причин блокировки",check:s=>s.usedReasons.size>=15},
-  {id:"speed_demon",title:"Спидраннер",desc:"Заблокировать 20 сервисов за одну сессию",check:s=>s.sessionBans>=20}
+  {id:"speed_demon",title:"Спидраннер",desc:"Заблокировать 20 сервисов за одну сессию",check:s=>s.sessionBans>=20},
+  {id:"nuke",title:"Всё. Конец.",desc:"Запрети нахуй все!",check:s=>!!s.nuked},
+  {id:"no_alphabet",title:"УРА!!!!11111 Я НЕМОЙ!!!!1111",desc:"Запретить все буквы русского и английского алфавита",check:s=>(s.letterBans||0)>=59}
 ];
 
 let isSpinning = false;
@@ -370,7 +475,7 @@ function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((a,b)=>a[0]-b[0]
 function fillReel(id, items){
   const el=document.getElementById(id);
   el.innerHTML='';
-  items.forEach(t=>{const d=document.createElement('div');d.textContent=t;el.appendChild(d);});
+  items.forEach(t=>{const d=document.createElement('div');d.innerHTML=censorStr(t);el.appendChild(d);});
 }
 fillReel('reelService',services);
 fillReel('reelReason',reasons);
@@ -532,10 +637,10 @@ function showResult(items){
   card.innerHTML=items.map(it=>{
     const docsChosen=shuffle(docs).slice(0,Math.floor(Math.random()*2)+1);
     const docList=docsChosen.map(d=>`• Федеральный закон № ${d.num} – «${d.title}»`).join('<br>');
-    return `<strong>Сервис:</strong> ${it.service}<br>
-            <strong>Обвиняем в:</strong> ${it.reason}<br>
-            <strong>Способ запрета:</strong> ${it.method}<br>
-            <br><strong>Нормативное обоснование:</strong><br>${docList}<hr>`;
+    return `<strong>Сервис:</strong> ${censorStr(it.service)}<br>
+            <strong>Обвиняем в:</strong> ${censorStr(it.reason)}<br>
+            <strong>Способ запрета:</strong> ${censorStr(it.method)}<br>
+            <br><strong>Нормативное обоснование:</strong><br>${censorStr(docList)}<hr>`;
   }).join('');
   card.style.display='block';
 }
@@ -555,6 +660,139 @@ document.getElementById('addServiceBtn').addEventListener('click',()=>{
     checkAchievements();
     updateAchievements();
   }
+});
+
+function applyNuke(){
+  document.body.style.background='#000';
+  document.body.style.color='#000';
+  document.querySelectorAll('*').forEach(el=>{
+    el.style.color='#000';
+    el.style.background='#000';
+    el.style.borderColor='#000';
+    el.style.boxShadow='none';
+    el.style.textShadow='none';
+  });
+  if(!document.getElementById('rknOverlay')){
+    const ov=document.createElement('div');
+    ov.id='rknOverlay';
+    ov.style.cssText='position:fixed;inset:0;background:#000;z-index:2147483647;user-select:none;-webkit-user-select:none;pointer-events:all;';
+    document.body.appendChild(ov);
+  }
+}
+if(localStorage.getItem('rknNuke')==='1') applyNuke();
+document.getElementById('nukeBtn').addEventListener('click',()=>{
+  if(!confirm('Запретить нахуй все? Это навсегда.')) return;
+  localStorage.setItem('rknNuke','1');
+  gameStats.nuked=true;
+  checkAchievements();saveStats();updateAchievements();
+  applyNuke();
+});
+
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='letter'&&!currentLetter&&!letterSpinning) spinLetter();
+  });
+});
+
+const letterPool=[
+  ...Array.from("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ").map(l=>({l,lang:"Русский"})),
+  ...Array.from("ABCDEFGHIJKLMNOPQRSTUVWXYZ").map(l=>({l,lang:"English"}))
+];
+let currentLetter=null,letterSpinning=false;
+
+function pickLetter(){
+  const banned=new Set((gameStats.bannedLetters||[]).map(b=>b.l));
+  const avail=letterPool.filter(b=>!banned.has(b.l));
+  return (avail.length?avail:letterPool)[Math.floor(Math.random()*(avail.length||letterPool.length))];
+}
+
+async function spinLetter(){
+  if(letterSpinning) return;
+  letterSpinning=true;
+  const big=document.getElementById('letterBig');
+  const lang=document.getElementById('letterLang');
+  const btn=document.getElementById('letterBanBtn');
+  btn.disabled=true;
+  big.classList.add('spin');
+  for(let i=0;i<18;i++){
+    const t=letterPool[Math.floor(Math.random()*letterPool.length)];
+    big.textContent=t.l;lang.textContent=t.lang;
+    await new Promise(r=>setTimeout(r,40+i*7));
+  }
+  big.classList.remove('spin');
+  currentLetter=pickLetter();
+  big.textContent=currentLetter.l;
+  lang.textContent=currentLetter.lang;
+  document.getElementById('letterNotice').textContent=`Роскомнадзор рассматривает букву «${currentLetter.l}»`;
+  letterSpinning=false;
+  btn.disabled=false;
+}
+
+function censorStr(text){
+  const banned=gameStats&&gameStats.bannedLetters||[];
+  if(!banned.length) return text;
+  let result='';
+  for(const ch of text){
+    let hit=false;
+    for(const b of banned){
+      if(ch===b.l||ch===b.l.toLowerCase()||ch===b.l.toUpperCase()){hit=true;break;}
+    }
+    result+=hit?'<span class="ркн"></span>':ch;
+  }
+  return result;
+}
+
+function censorLetter(letter){
+  const chars=new Set([letter,letter.toLowerCase(),letter.toUpperCase()]);
+  function walk(node){
+    if(node.nodeType===Node.TEXT_NODE){
+      let found=false;
+      for(const c of chars)if(node.textContent.includes(c)){found=true;break;}
+      if(!found)return;
+      const frag=document.createDocumentFragment();
+      let buf='';
+      for(const ch of node.textContent){
+        if(chars.has(ch)){
+          if(buf){frag.appendChild(document.createTextNode(buf));buf='';}
+          const sp=document.createElement('span');
+          sp.className='ркн';sp.textContent=ch;
+          frag.appendChild(sp);
+        }else buf+=ch;
+      }
+      if(buf)frag.appendChild(document.createTextNode(buf));
+      node.parentNode.replaceChild(frag,node);
+    }else if(node.nodeType===Node.ELEMENT_NODE&&!/^(SCRIPT|STYLE|INPUT|TEXTAREA)$/.test(node.tagName)&&!node.classList.contains('ркн')){
+      Array.from(node.childNodes).forEach(walk);
+    }
+  }
+  walk(document.body);
+}
+
+document.getElementById('letterBanBtn').addEventListener('click',async()=>{
+  if(letterSpinning)return;
+  if(!currentLetter){await spinLetter();return;}
+  const letter=currentLetter;currentLetter=null;
+  gameStats.bannedLetters=gameStats.bannedLetters||[];
+  if(!gameStats.bannedLetters.find(b=>b.l===letter.l))gameStats.bannedLetters.push(letter);
+  gameStats.letterBans=(gameStats.letterBans||0)+1;
+  censorLetter(letter.l);
+  document.getElementById('letterNotice').textContent=`Роскомнадзор запретил букву «${letter.l}»`;
+  document.getElementById('letterBig').textContent='█';
+  document.getElementById('letterLang').textContent='';
+  document.getElementById('letterStats').textContent=`Запрещено букв: ${gameStats.letterBans}`;
+  const log=document.getElementById('letterLog');
+  const d=document.createElement('div');d.textContent=`«${letter.l}» (${letter.lang}) — ЗАПРЕЩЕНА`;
+  log.prepend(d);
+  checkAchievements();saveStats();updateUI();
+  const btn=document.getElementById('letterBanBtn');
+  btn.disabled=true;
+  await new Promise(r=>setTimeout(r,800));
+  btn.disabled=false;
+  await spinLetter();
 });
 
 loadStats();
